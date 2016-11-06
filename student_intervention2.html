@@ -11800,7 +11800,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import libraries</span>
@@ -11852,7 +11852,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Calculate number of students</span>
@@ -11916,7 +11916,7 @@ Graduation rate of the class: 67.09%
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Extract feature columns</span>
@@ -11998,7 +11998,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">preprocess_features</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12027,6 +12027,12 @@ Feature values:
 
 <span class="n">X_all</span> <span class="o">=</span> <span class="n">preprocess_features</span><span class="p">(</span><span class="n">X_all</span><span class="p">)</span>
 <span class="k">print</span> <span class="s2">&quot;Processed feature columns ({} total features):</span><span class="se">\n</span><span class="s2">{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_all</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">X_all</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+
+<span class="c1"># here I added feature standardization since I&#39;m going to use algos that are sensitive to feature scale</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_all</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_all</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12069,7 +12075,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import any additional functionality you may need here</span>
@@ -12081,7 +12087,8 @@ Feature values:
 <span class="n">num_test</span> <span class="o">=</span> <span class="n">X_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_train</span>
 
 <span class="c1"># TODO: Shuffle and split the dataset into the number of training and testing points above</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">num_test</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="c1"># REMARK added stratify = y_all to compensate for slight class imbalance, as for reviewer suggestion</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">stratify</span> <span class="o">=</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">num_test</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># Show the results of the split</span>
 <span class="k">print</span> <span class="s2">&quot;Training set has {} samples.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -12149,14 +12156,16 @@ Testing set has 95 samples.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The features are of discrete type, often binary, with no missing values.</p>
-<p>As a first algorithm I would try Decision Trees or ensemble methods based on Decision Trees like Random Forest. Decision Trees have the advantage that they provide a easily understandable explanation of their behavior. If it was important to know which features were the most important for the classification task, for example to create an interactive user interface based on Q&amp;A to the decision process, Decision Trees would be a good choice. Random Forest are better performing in term of F1 score given the ensemble nature of the algorithm but present two drawbacks with respect to Decision Trees: they are more expensive in terms of training and prediction time and they do not provide the same explanatory capability.
+<p>The features are of discrete type, often binary, with no missing values. The training data set is small and slightly unbalanced between the two classes we need to predict. So we can follow a path through the algoritms that sklearn suggests for this type of situation:</p>
+<p>the first algorithm I would try is the linear Support Vector Machine. The SVM can be a powerful classifier capable of dealing with situations when the classes are not linearly separable but as a first attempt to deal with this kind of data we should try a linearly separable boundary to see how it works. SVMs work well with high dimensional data. In terms of machine efficiency they are more expensive to train but use less memory than other algorithms. SVM are sensitive to scaling in the data, so we would have to standardize our training set to use them effectively since some features have significantly higher ranges than the others. They also suffer from imbalanced classes. 
+SVMs are used for various tasks from image classification and text categorization to protein classification in biology. I'd give a first try at this algorithm and compare it to the next ones;</p>
+<p>the second algorithm that may be used is K Nearest Neighbors. This is an instance based algorithm that uses the whole data to make a prediction instead of building a parametric model (and then throw away the data). This algorithm is a good choice when the decision boundary is highly irregular and when the domain of application suggest a clear distance metric that may be used to cluster the data points. For example this algorithm can be very powerful on geolocated data. Any time we come up with a request to classify a sample based on a measure of "similarity" kNN can be the best choice. In our case we can look for students that have similar characteristics with respect to the student we want to classify. By finding the most similar N (hyperparameter) cases we can then apply some form of voting (weighted or not) to decide whether the student should be classified as passing or not. This algorithm is widely used for many classification tasks, from medical applications, document classification to recommender systems. A great advantage of kNN is that there is no training. This may be seem an advantage for our case study since one of the requirements is to keep resource usage low. On the other hand this algorithm can generally be much slower at prediction time. With fast changing data, this algorithm can keep up very well while other algorithms require continuous retraining, but one drawback of kNN is that it is affected by the curse of dimensionality problem. As the number of features grows we need exponentially more data to get good results. With a small sample like the one we have it is possible to use a brute force algorithm but as the data grows it becomes impossible;</p>
+<p>the third algorithm I selected is Decision Trees or better an ensemble method based on Decision Trees: Random Forest. Decision Trees have the advantage that they provide a easily understandable explanation of their behavior. If it was important to know which features were the most important for the classification task, for example to create an interactive user interface based on Q&amp;A to the decision process, Decision Trees would be a good choice. 
 Decision Trees create rectangular decision boundaries so the data must fit this hypothesis space for this algorithm to work well.
 The risk with Decision Trees in general is overfitting. We need to be able to prune the tree at the right place to avoid it. Another problem with decision trees is that our two classes are a bit imbalanced. The true class is twice more frequent than the false one. This may have a negative impact on the quality of the generated tree. One last caveat is that the number of features is big relative to the size of the training set. This means we have a dimensionality problem and the decision tree may find it difficult to select the correct features to create the tree.
-Decision Trees and relative ensembles are widely used in so many industries that making a list would take half of this answer. I found a reference here: <a href="http://www.cbcb.umd.edu/~salzberg/docs/murthy_thesis/survey/node32.html">http://www.cbcb.umd.edu/~salzberg/docs/murthy_thesis/survey/node32.html</a></p>
-<p>Another algorithm that I would try on this data is Logistic Regression. Logistic Regression is a simple, fast algorithm that often performs surprisingly well. Since the variable to predict is binary, we also avoid to resort to the one-vs-rest approach. Logistic Regression is a widely used algorithm in applications ranging from marketing to medical research, to give two notable examples. Logistic Regression works well when the classes are linearly separable. If this is not the case this algorithm tends to perform badly. if the data supports it this may be our best choice.</p>
-<p>As a third algorithm I would try a Support Vector Machine. The SVM can be a powerful classifier capable of dealing with situations when the classes are not linearly separable. They work well with high dimensional data. In terms of machine efficiency they are more expensive to train but use less memory than other algorithms. SVM are sensitive to scaling in the data, so we would have to standardize our training set to use them effectively since some features have significantly higher ranges than the others. They also suffer from imbalanced classes. 
-SVMs are used for various tasks from image classification and text categorization to protein classification in biology. I'm evaluating this algorithm as an alternative to LR in case the data shows a marked non linear decision boundary (if LR is underperforming we may conclude that there is not linear separation thus we may try a SVM).</p>
+Random Forests are better performing in term of F1 score given the ensemble nature of the algorithm but present two drawbacks with respect to Decision Trees: they are more expensive in terms of training and prediction time and they do not provide the same explanatory capability.
+Decision Trees and relative ensembles are widely used in so many industries that making a list would take half of this answer. I found a reference here: <a href="http://www.cbcb.umd.edu/~salzberg/docs/murthy_thesis/survey/node32.html">http://www.cbcb.umd.edu/~salzberg/docs/murthy_thesis/survey/node32.html</a>
+Our dataset is a good fit for this algorithm since we have primarily categorical features, a small data set, and we can control overfitting in the tuning phase.</p>
 
 </div>
 </div>
@@ -12181,7 +12190,7 @@ SVMs are used for various tasks from image classification and text categorizatio
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
@@ -12254,18 +12263,18 @@ SVMs are used for various tasks from image classification and text categorizatio
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import the three supervised learning models from sklearn</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 
 <span class="c1"># TODO: Initialize the three models</span>
-<span class="n">clf_A</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">clf_B</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">clf_C</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_A</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_B</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span>
+<span class="n">clf_C</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># TODO: Set up the training set sizes</span>
 <span class="n">X_train_100</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">]</span>
@@ -12281,7 +12290,6 @@ SVMs are used for various tasks from image classification and text categorizatio
 <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="p">[</span><span class="n">clf_A</span><span class="p">,</span> <span class="n">clf_B</span><span class="p">,</span> <span class="n">clf_C</span><span class="p">]:</span>
     <span class="k">for</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="ow">in</span> <span class="p">[[</span><span class="n">X_train_100</span><span class="p">,</span> <span class="n">y_train_100</span><span class="p">],</span> <span class="p">[</span><span class="n">X_train_200</span><span class="p">,</span> <span class="n">y_train_200</span><span class="p">],</span> <span class="p">[</span><span class="n">X_train_300</span><span class="p">,</span> <span class="n">y_train_300</span><span class="p">]]:</span>
         <span class="n">train_predict</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
-        <span class="k">print</span> <span class="n">clf</span>
 </pre></div>
 
 </div>
@@ -12294,99 +12302,60 @@ SVMs are used for various tasks from image classification and text categorizatio
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Training a RandomForestClassifier using a training set size of 100. . .
-Trained model in 0.0266 seconds
-Made predictions in 0.0013 seconds.
-F1 score for training set: 0.9844.
-Made predictions in 0.0012 seconds.
-F1 score for test set: 0.7153.
-RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
-            max_depth=None, max_features=&#39;auto&#39;, max_leaf_nodes=None,
-            min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
-            oob_score=False, random_state=42, verbose=0, warm_start=False)
-Training a RandomForestClassifier using a training set size of 200. . .
-Trained model in 0.0269 seconds
-Made predictions in 0.0014 seconds.
-F1 score for training set: 0.9964.
-Made predictions in 0.0012 seconds.
-F1 score for test set: 0.7857.
-RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
-            max_depth=None, max_features=&#39;auto&#39;, max_leaf_nodes=None,
-            min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
-            oob_score=False, random_state=42, verbose=0, warm_start=False)
-Training a RandomForestClassifier using a training set size of 300. . .
-Trained model in 0.0280 seconds
-Made predictions in 0.0016 seconds.
-F1 score for training set: 0.9951.
-Made predictions in 0.0012 seconds.
-F1 score for test set: 0.8092.
-RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
-            max_depth=None, max_features=&#39;auto&#39;, max_leaf_nodes=None,
-            min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
-            oob_score=False, random_state=42, verbose=0, warm_start=False)
-Training a LinearSVC using a training set size of 100. . .
-Trained model in 0.0102 seconds
-Made predictions in 0.0002 seconds.
-F1 score for training set: 0.8794.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7556.
-LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
-     intercept_scaling=1, loss=&#39;squared_hinge&#39;, max_iter=1000,
-     multi_class=&#39;ovr&#39;, penalty=&#39;l2&#39;, random_state=42, tol=0.0001,
-     verbose=0)
+<pre>Training a LinearSVC using a training set size of 100. . .
+Trained model in 0.0105 seconds
+Made predictions in 0.0001 seconds.
+F1 score for training set: 0.8986.
+Made predictions in 0.0001 seconds.
+F1 score for test set: 0.6441.
 Training a LinearSVC using a training set size of 200. . .
-Trained model in 0.0217 seconds
-Made predictions in 0.0003 seconds.
-F1 score for training set: 0.8258.
+Trained model in 0.0302 seconds
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7907.
-LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
-     intercept_scaling=1, loss=&#39;squared_hinge&#39;, max_iter=1000,
-     multi_class=&#39;ovr&#39;, penalty=&#39;l2&#39;, random_state=42, tol=0.0001,
-     verbose=0)
+F1 score for training set: 0.8315.
+Made predictions in 0.0001 seconds.
+F1 score for test set: 0.7424.
 Training a LinearSVC using a training set size of 300. . .
-Trained model in 0.0440 seconds
-Made predictions in 0.0003 seconds.
-F1 score for training set: 0.8478.
+Trained model in 0.0641 seconds
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7914.
-LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
-     intercept_scaling=1, loss=&#39;squared_hinge&#39;, max_iter=1000,
-     multi_class=&#39;ovr&#39;, penalty=&#39;l2&#39;, random_state=42, tol=0.0001,
-     verbose=0)
-Training a LogisticRegression using a training set size of 100. . .
-Trained model in 0.0018 seconds
-Made predictions in 0.0002 seconds.
-F1 score for training set: 0.8593.
-Made predictions in 0.0004 seconds.
-F1 score for test set: 0.7647.
-LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-          intercept_scaling=1, max_iter=100, multi_class=&#39;ovr&#39;, n_jobs=1,
-          penalty=&#39;l2&#39;, random_state=42, solver=&#39;liblinear&#39;, tol=0.0001,
-          verbose=0, warm_start=False)
-Training a LogisticRegression using a training set size of 200. . .
-Trained model in 0.0033 seconds
-Made predictions in 0.0003 seconds.
-F1 score for training set: 0.8562.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7914.
-LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-          intercept_scaling=1, max_iter=100, multi_class=&#39;ovr&#39;, n_jobs=1,
-          penalty=&#39;l2&#39;, random_state=42, solver=&#39;liblinear&#39;, tol=0.0001,
-          verbose=0, warm_start=False)
-Training a LogisticRegression using a training set size of 300. . .
-Trained model in 0.0047 seconds
-Made predictions in 0.0004 seconds.
-F1 score for training set: 0.8468.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.8060.
-LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-          intercept_scaling=1, max_iter=100, multi_class=&#39;ovr&#39;, n_jobs=1,
-          penalty=&#39;l2&#39;, random_state=42, solver=&#39;liblinear&#39;, tol=0.0001,
-          verbose=0, warm_start=False)
+F1 score for training set: 0.8485.
+Made predictions in 0.0001 seconds.
+F1 score for test set: 0.7463.
+Training a KNeighborsClassifier using a training set size of 100. . .
+Trained model in 0.0006 seconds
+Made predictions in 0.0019 seconds.
+F1 score for training set: 0.8027.
+Made predictions in 0.0018 seconds.
+F1 score for test set: 0.7534.
+Training a KNeighborsClassifier using a training set size of 200. . .
+Trained model in 0.0008 seconds
+Made predictions in 0.0058 seconds.
+F1 score for training set: 0.8014.
+Made predictions in 0.0030 seconds.
+F1 score for test set: 0.7324.
+Training a KNeighborsClassifier using a training set size of 300. . .
+Trained model in 0.0010 seconds
+Made predictions in 0.0116 seconds.
+F1 score for training set: 0.8281.
+Made predictions in 0.0040 seconds.
+F1 score for test set: 0.7671.
+Training a RandomForestClassifier using a training set size of 100. . .
+Trained model in 0.0265 seconds
+Made predictions in 0.0011 seconds.
+F1 score for training set: 0.9924.
+Made predictions in 0.0011 seconds.
+F1 score for test set: 0.7368.
+Training a RandomForestClassifier using a training set size of 200. . .
+Trained model in 0.0254 seconds
+Made predictions in 0.0014 seconds.
+F1 score for training set: 0.9885.
+Made predictions in 0.0011 seconds.
+F1 score for test set: 0.6614.
+Training a RandomForestClassifier using a training set size of 300. . .
+Trained model in 0.0252 seconds
+Made predictions in 0.0014 seconds.
+F1 score for training set: 0.9975.
+Made predictions in 0.0012 seconds.
+F1 score for test set: 0.7077.
 </pre>
 </div>
 </div>
@@ -12410,6 +12379,74 @@ LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Linear SVC </strong></p>
+<table>
+<thead><tr>
+<th style="text-align:center">Training Set Size</th>
+<th style="text-align:center">Training Time</th>
+<th style="text-align:center">Prediction Time (test)</th>
+<th style="text-align:center">F1 Score (train)</th>
+<th style="text-align:center">F1 Score (test)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">100</td>
+<td style="text-align:center">0.0105</td>
+<td style="text-align:center">0.0001</td>
+<td style="text-align:center">0.8986</td>
+<td style="text-align:center">0.6441</td>
+</tr>
+<tr>
+<td style="text-align:center">200</td>
+<td style="text-align:center">0.0302</td>
+<td style="text-align:center">0.0002</td>
+<td style="text-align:center">0.8315</td>
+<td style="text-align:center">0.7424</td>
+</tr>
+<tr>
+<td style="text-align:center">300</td>
+<td style="text-align:center">0.0641</td>
+<td style="text-align:center">0.0001</td>
+<td style="text-align:center">0.8485</td>
+<td style="text-align:center">0.7463</td>
+</tr>
+</tbody>
+</table>
+<p><strong> K Nearest Neighbors </strong></p>
+<table>
+<thead><tr>
+<th style="text-align:center">Training Set Size</th>
+<th style="text-align:center">Training Time</th>
+<th style="text-align:center">Prediction Time (test)</th>
+<th style="text-align:center">F1 Score (train)</th>
+<th style="text-align:center">F1 Score (test)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">100</td>
+<td style="text-align:center">0.0006</td>
+<td style="text-align:center">0.0018</td>
+<td style="text-align:center">0.8027</td>
+<td style="text-align:center">0.7534</td>
+</tr>
+<tr>
+<td style="text-align:center">200</td>
+<td style="text-align:center">0.0008</td>
+<td style="text-align:center">0.0058</td>
+<td style="text-align:center">0.8014</td>
+<td style="text-align:center">0.7324</td>
+</tr>
+<tr>
+<td style="text-align:center">300</td>
+<td style="text-align:center">0.0010</td>
+<td style="text-align:center">0.0116</td>
+<td style="text-align:center">0.8281</td>
+<td style="text-align:center">0.7671</td>
+</tr>
+</tbody>
+</table>
 <p><strong> Random Forest </strong></p>
 <table>
 <thead><tr>
@@ -12423,92 +12460,24 @@ LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0311</td>
+<td style="text-align:center">0.0265</td>
+<td style="text-align:center">0.0011</td>
+<td style="text-align:center">0.9924</td>
+<td style="text-align:center">0.7368</td>
+</tr>
+<tr>
+<td style="text-align:center">200</td>
+<td style="text-align:center">0.0254</td>
+<td style="text-align:center">0.0011</td>
+<td style="text-align:center">0.9885</td>
+<td style="text-align:center">0.6614</td>
+</tr>
+<tr>
+<td style="text-align:center">300</td>
+<td style="text-align:center">0.0252</td>
 <td style="text-align:center">0.0012</td>
-<td style="text-align:center">0.9844</td>
-<td style="text-align:center">0.7153</td>
-</tr>
-<tr>
-<td style="text-align:center">200</td>
-<td style="text-align:center">0.0242</td>
-<td style="text-align:center">0.0013</td>
-<td style="text-align:center">0.9964</td>
-<td style="text-align:center">0.7857</td>
-</tr>
-<tr>
-<td style="text-align:center">300</td>
-<td style="text-align:center">0.0271</td>
-<td style="text-align:center">0.0015</td>
-<td style="text-align:center">0.9951</td>
-<td style="text-align:center">0.8092</td>
-</tr>
-</tbody>
-</table>
-<p><strong> SVC </strong></p>
-<table>
-<thead><tr>
-<th style="text-align:center">Training Set Size</th>
-<th style="text-align:center">Training Time</th>
-<th style="text-align:center">Prediction Time (test)</th>
-<th style="text-align:center">F1 Score (train)</th>
-<th style="text-align:center">F1 Score (test)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">100</td>
-<td style="text-align:center">0.0101</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8794</td>
-<td style="text-align:center">0.7556</td>
-</tr>
-<tr>
-<td style="text-align:center">200</td>
-<td style="text-align:center">0.0218</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8258</td>
-<td style="text-align:center">0.7907</td>
-</tr>
-<tr>
-<td style="text-align:center">300</td>
-<td style="text-align:center">0.0437</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8478</td>
-<td style="text-align:center">0.7914</td>
-</tr>
-</tbody>
-</table>
-<p><strong> Logistic Regression </strong></p>
-<table>
-<thead><tr>
-<th style="text-align:center">Training Set Size</th>
-<th style="text-align:center">Training Time</th>
-<th style="text-align:center">Prediction Time (test)</th>
-<th style="text-align:center">F1 Score (train)</th>
-<th style="text-align:center">F1 Score (test)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">100</td>
-<td style="text-align:center">0.0013</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8593</td>
-<td style="text-align:center">0.7647</td>
-</tr>
-<tr>
-<td style="text-align:center">200</td>
-<td style="text-align:center">0.0023</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8562</td>
-<td style="text-align:center">0.7914</td>
-</tr>
-<tr>
-<td style="text-align:center">300</td>
-<td style="text-align:center">0.0034</td>
-<td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8468</td>
-<td style="text-align:center">0.8060</td>
+<td style="text-align:center">0.9975</td>
+<td style="text-align:center">0.7077</td>
 </tr>
 </tbody>
 </table>
@@ -12541,9 +12510,8 @@ LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Random Forest seems to be the best performing algorithm in terms of F1 score. Logistic Regression is marginally worse. In terms of processing cost, Random Forest is one order of magnitude more expensive to train and the same can be said about prediction performance. Indeed, the absolute numbers are not practically relevant (with this amount of data) and training time remained constant for RF from 100 to 300 samples. It seems to me that the Random Forest could improve significantly with more data and adequate tuning while LR seems more difficult to improve.
-The SVM is the worst performer but I didn't use scaled features. I tried a rbf kernel but the linear one works a bit better. Anyway I didn't spend more time on SVM since the training time is also much worse as the data set grows.
-In conclusion I'm going to tune the Random Forest since I don't believe that subsecond differences are going to matter in practice.</p>
+<p>In terms of F1 score the algorithm that scored best is kNN. Random Forest came last. In terms of processing cost kNN is going to increase its cost significantly as the data size grows while the other algorithms seem quite stable at prediction and RF is also quite constant in training time. With such a small dataset processing time differences are not relevant, so we should ask for a prediction on real world dataset sizes and their expected growth rate to decide wether this aspect should affect our choice of algorithm.
+I want to point out that the measured score of the three algorithms is not so different and making a choice based on untuned results is a bit arbitrary. In reality I think we should make a choice after some tuning attempts on all three models. We see that RF tends to overfit in our untuned test and has a consistently high training F1 score. Maybe with some tuning it can do relatively better than the others. Actually, I tuned all three algorithms and saw that kNN and LinearSVC improve much less than RF and in the end RF has the best result. In conclusion, I'm going to choose the Random Forest which also is the most stable in terms of processing time. Maybe this is cheating, but if I had decided based on the test F1 performance of the untuned models I would have chosen the wrong model and probably also the slowest.</p>
 
 </div>
 </div>
@@ -12563,8 +12531,9 @@ In conclusion I'm going to tune the Random Forest since I don't believe that sub
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The algorithm we chose is Random Forest. It is a widely used classification algorithm based on Decision Trees. Basically, the Decision Tree algorithm tries to find the most important feature on which we can split our data so that we have most "passed" cases on one split and most "not passed" cases on the other. This process is repeated on the splits using other features to make new splits thus creating a tree where the nodes are questions and the answers to these questions allow us to navigate through the tree until we find a leaf that gives us the requested answer. 
-Building such a tree is a non deterministic procedure (in particular when the number of features is large). This means I will probably get a different tree every time I will run it. In order to mitigate the effects of random tree construction, the Random Forest algorithm creates many of these trees and chooses an answer by having each member tree express a vote (remark: this is not the way sklearn does it but seems easier to understand in layman terms).</p>
+<p>The algorithm we chose is Random Forest. It is a widely used classification algorithm based on Decision Trees. Basically, the Decision Tree algorithm tries to find the feature on which we can split our data so that we have most "passed" cases on one split and most "not passed" cases on the other. The feature that generates the best separation of our data is chosen first to create the root node of the tree.
+The splitting process is repeated on the obtained two splits using the remaining features in the same fashion to iteratively make new splits. This results in the creation a tree where the nodes can be interpreted as questions we can ask about a new sample we need to classify and the edges are the possibile answers to these questions. This allow us to navigate  the tree until we find a leaf node that gives us the requested classification.
+Building such a tree is a non deterministic procedure (in particular when the number of features is large). This means I will probably get a different tree every time I will run it. In order to mitigate the effects of random tree construction, the Random Forest algorithm creates many of these trees and chooses an answer by having each member tree express a vote (remark: this is not the way sklearn does it but seems easier to understand in layman terms) and choosing the final answer by majority.</p>
 
 </div>
 </div>
@@ -12595,7 +12564,7 @@ Building such a tree is a non deterministic procedure (in particular when the nu
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.grid_search</span> <span class="kn">import</span> <span class="n">GridSearchCV</span> 
@@ -12604,7 +12573,7 @@ Building such a tree is a non deterministic procedure (in particular when the nu
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min_samples_split&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]}</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min_samples_split&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]}</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -12637,11 +12606,11 @@ Building such a tree is a non deterministic procedure (in particular when the nu
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;min_samples_split&#39;: 10}
-Made predictions in 0.0016 seconds.
-Tuned model has a training F1 score of 0.9095.
-Made predictions in 0.0012 seconds.
-Tuned model has a testing F1 score of 0.7801.
+<pre>{&#39;min_samples_split&#39;: 40}
+Made predictions in 0.0014 seconds.
+Tuned model has a training F1 score of 0.8358.
+Made predictions in 0.0010 seconds.
+Tuned model has a testing F1 score of 0.8052.
 </pre>
 </div>
 </div>
@@ -12655,7 +12624,7 @@ Tuned model has a testing F1 score of 0.7801.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Question-5---Final-F1-Score">Question 5 - Final F<sub>1</sub> Score<a class="anchor-link" href="#Question-5---Final-F1-Score">&#182;</a></h3><p><em>What is the final model's F<sub>1</sub> score for training and testing? How does that score compare to the untuned model?</em></p>
+<h5 id="Question-5---Final-F1-Score">Question 5 - Final F<sub>1</sub> Score<a class="anchor-link" href="#Question-5---Final-F1-Score">&#182;</a></h5><p><em>What is the final model's F<sub>1</sub> score for training and testing? How does that score compare to the untuned model?</em></p>
 
 </div>
 </div>
@@ -12665,11 +12634,9 @@ Tuned model has a testing F1 score of 0.7801.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The training score after tuning is 0.9095 while the test score is 0.7801. Due to randomness in the construction if we repeat the tuning procedure we get different results so I used the same random state used in the model selection phase. I tried various values for min_samples_split. I played with a lot of combinations using various parameters like min_samples_split, min_samples_leaf, max_features and n_estimators and got no better answer than the default one which is the one I would clearly keep.
-What is relevant from this is that tuning did not improve the model. I tried to reason about this behavior which seems odd at first. Why we didn't get our original untuned model as the best one and instead we got a worse one? One possibile explanation I came with is that we have a rather small training set and GridSearchCV does folding, so it has to use an even smaller training set to test the various parameter combinations. With such a small training set maybe this procedure is not so effective and is not capable of finding the best hyperparameters combination. But I'm guessing. I may have done something bad.
-I confess I couldn't resist the temptation to tune the Logistic Regression model too to see what happened and even for this model I saw no improvement with respect to the untuned value of C.
-In the end I would prefer the RandomForestClassifier if the expectation is to have more data available in the future to train the model. We see from the learning curves that are implicit in the data we collected that as the training set size grows the RF algoritm improves a bit faster than LR and the training score of RF is better than LR. Since the training score is the upper limit for the test score, RF seems to have more room for improvement.
-The absolute runtime performance of the two models is not so different with this data set. We are talking about timing deltas in the order of milliseconds. So I would actually use the RF on this data and schedule a second run of comparison between RF and LR when significantly more data is made available.</p>
+<p>The training score after tuning is 0.8358, as expected since tuning reduced overfitting, while the test score is 0.8052, much better than the untuned one. This is also the best score among the three tuning attempts I made (I didn't keep them in the code). Adding that training and prediction time seem quite good, I consider this the best overall choice.
+Due to randomness in the construction if we repeat the tuning procedure we get different results so I used the same random state used in the model selection phase. I tried various values for min_samples_split. I played with a lot of combinations using various parameters like min_samples_split, min_samples_leaf, max_features and n_estimators and got no better answer than the one shown.
+I wonder if we could try to remove some irrelevant features from the set in order to improve the score. There are probably some irrelevant features that only add noise to the results.</p>
 
 </div>
 </div>
